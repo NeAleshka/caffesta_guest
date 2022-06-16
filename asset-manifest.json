@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/caffesta_guest/static/css/main.1c14bc2e.css",
-    "main.js": "/caffesta_guest/static/js/main.29093d10.js",
+    "main.js": "/caffesta_guest/static/js/main.f3751f2f.js",
     "static/media/Geometria.woff": "/caffesta_guest/static/media/Geometria.b7f74b260291c82461d1.woff",
     "static/media/logo.svg": "/caffesta_guest/static/media/logo.80e3b7f2aa8f0e234e644ab3f5e86b66.svg",
     "static/media/qr.svg": "/caffesta_guest/static/media/qr.d90ce238c55f0df5833d9ed78d541502.svg",
@@ -13,10 +13,10 @@
     "static/media/email.svg": "/caffesta_guest/static/media/email.cfd7fc9e9b6a564041920dd6a8418ed8.svg",
     "static/media/profile.svg": "/caffesta_guest/static/media/profile.d8beab90a1c3af72e650dfbb71a80de6.svg",
     "main.1c14bc2e.css.map": "/caffesta_guest/static/css/main.1c14bc2e.css.map",
-    "main.29093d10.js.map": "/caffesta_guest/static/js/main.29093d10.js.map"
+    "main.f3751f2f.js.map": "/caffesta_guest/static/js/main.f3751f2f.js.map"
   },
   "entrypoints": [
     "static/css/main.1c14bc2e.css",
-    "static/js/main.29093d10.js"
+    "static/js/main.f3751f2f.js"
   ]
 }
