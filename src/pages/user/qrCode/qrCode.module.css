@@ -1,0 +1,23 @@
+.wrapper{
+    margin-top: 24px;
+    font-size: 22px;
+    line-height: 27px;
+}
+
+.titleQr{
+    margin:20px 0 15px 0;
+}
+
+.descrBottom{
+    margin-top: 9px;
+    font-size: 22px;
+    line-height: 27px;
+    max-width: 332px;
+}
+
+
+@media screen and (max-width: 300px) {
+    .qrWrapper{
+        width: 100%;
+    }
+}

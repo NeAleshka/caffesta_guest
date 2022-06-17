@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Main from "./pages/main/Main";
+import {Route, Routes} from "react-router-dom";
+import SingUp from "./pages/sing_up/SingUp";
+import LayOut from "./components/LayOut/LayOut";
+import SendMessage from "./pages/send_message/SendMessage";
+import ConfirmEmail from "./pages/confirmEmail/ConfirmEmail";
+import InfoUser from "./pages/user/infoUser/InfoUser";
+import Accumulation from "./pages/user/accumulation/accumulation";
+import User from "./pages/user/User";
+import QRCode from "./pages/user/qrCode/QRCode";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <LayOut/>
+            <Routes>
+                <Route path={''} element={<Main/>}/>
+                <Route path={'/sing_up'} element={<SingUp/>}/>
+                <Route path={'/send_message'} element={<SendMessage/>}/>
+                <Route path={'/confirm_email'} element={<ConfirmEmail/>}/>
+                <Route path={'/user'} element={<User/>}>
+                    <Route path={'/user/info'} element={<InfoUser/>}/>
+                    <Route path={'/user/accumulation'} element={<Accumulation/>}/>
+                    <Route path={'/user/qr_code'} element={<QRCode/>}/>
+                </Route>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;
