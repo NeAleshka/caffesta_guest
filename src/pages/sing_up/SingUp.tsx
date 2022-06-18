@@ -16,6 +16,8 @@ type FormikErrorType = {
     name?: string
     lastName?: string
     birthday?: any
+    login?: any
+    password?: any
 }
 
 
@@ -29,6 +31,8 @@ const SingUp = () => {
             name: '',
             lastName: '',
             birthday: '',
+            login: '',
+            password: '',
         },
         validate: (values) => {
             const errors: FormikErrorType = {}
@@ -37,10 +41,15 @@ const SingUp = () => {
             } else if (values.name.length < 2) {
                 errors.name = 'Минимальная длина 2 символа'
             }
-            if (!values.lastName) {
-                errors.lastName = "Обязательное поле"
-            } else if (values.lastName.length < 2) {
-                errors.lastName = 'Минимальная длина 2 символа'
+            if (!values.login) {
+                errors.login = "Обязательное поле"
+            } else if (values.login.length < 4) {
+                errors.login = 'Минимальная длина 4 символа'
+            }
+            if (!values.password) {
+                errors.password = "Обязательное поле"
+            } else if (values.password.length < 2) {
+                errors.password = 'Минимальная длина 4 символа'
             }
             if (values.email.length) {
                 if (!/^[A-Z\d._%+-]+@[A-Z\d.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -61,8 +70,6 @@ const SingUp = () => {
     const checkInputs = () => {
         return (!!Object.keys(formik.errors).length || !formik.getFieldProps('phone').value)
     }
-
-    console.log(formik.values);
 
     const validDate = (date:Date) => {
     let day:string|number=date.getUTCDate()
@@ -85,6 +92,26 @@ const SingUp = () => {
                         <div className="form">
                             <form className={styles.form_body} onSubmit={formik.handleSubmit}>
                                 <div className={styles.form__item}>
+                                    <input className={styles.input_data} type="text"
+                                           placeholder="Логин"
+                                           {...formik.getFieldProps('login')}
+                                    />
+                                    <div className={styles.input_icons}>
+                                        <img src={user} alt={'login'} />
+                                    </div>
+                                    {formik.touched.login && formik.errors.login && <div className={styles.formik_errors}>{formik.errors.login}</div>}
+                                </div>
+                                <div className={styles.form__item}>
+                                    <input className={styles.input_data} type="text"
+                                           placeholder="Пароль"
+                                           {...formik.getFieldProps('password')}
+                                    />
+                                    <div className={styles.input_icons}>
+                                        <img src={user} alt={'pass'}/>
+                                    </div>
+                                    {formik.touched.password && formik.errors.password && <div className={styles.formik_errors}>{formik.errors.password}</div>}
+                                </div>
+                                <div className={styles.form__item}>
                                     <input className={styles.input_data} type="tel"
                                            placeholder="+375000000000"
                                            {...formik.getFieldProps('phone')}
@@ -95,7 +122,7 @@ const SingUp = () => {
                                     {formik.touched.phone && formik.errors.phone && <div className={styles.formik_errors}>{formik.errors.phone}</div>}
                                 </div>
                                 <div className={styles.form__item}>
-                                    <input className={styles.input_data} id="formEmail"
+                                    <input className={styles.input_data}
                                            type="email" {...formik.getFieldProps('email')}
                                            placeholder="example@company.com"/>
                                     <div className={styles.input_icons} style={{top: "15px"}}>
@@ -104,18 +131,18 @@ const SingUp = () => {
                                     {formik.touched.email && formik.errors.email && <div className={styles.formik_errors}>{formik.errors.email}</div>}
                                 </div>
                                 <div className={styles.form__item}>
-                                    <input className={styles.input_data} id="formName"
+                                    <input className={styles.input_data}
                                            type="text" {...formik.getFieldProps('name')}
-                                           placeholder="name"/>
+                                           placeholder="Имя"/>
                                     <div className={styles.input_icons}>
                                         <img src={user} alt={'first name'}/>
                                     </div>
                                     {formik.touched.name && formik.errors.name && <div className={styles.formik_errors}>{formik.errors.name}</div>}
                                 </div>
                                 <div className={styles.form__item}>
-                                    <input className={styles.input_data} id="formSName"
+                                    <input className={styles.input_data}
                                            type="text" {...formik.getFieldProps('lastName')}
-                                           placeholder="surname"/>
+                                           placeholder="Фамилия"/>
                                     <div className={styles.input_icons}>
                                         <img src={user} alt={'last name'}/>
                                     </div>
@@ -134,7 +161,7 @@ const SingUp = () => {
                                                 placeholderText={'01.01.1999'}
                                     />
                                     <div className={styles.input_icons}>
-                                        <img src={calendar} alt={'data'} id='someId'/>
+                                        <img src={calendar} alt={'data'}/>
                                     </div>
                                     {formik.touched.birthday && formik.errors.birthday &&
                                         <div className={styles.formik_errors}>{formik.errors.birthday}</div>}

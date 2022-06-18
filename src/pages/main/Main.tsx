@@ -17,8 +17,8 @@ const Main=()=>{
                             </form>
                             <form className={styles.form__body} >
                                 <button className={`${styles.type1} ${styles.type2}`}
-                                        onClick={()=>{}}>
-                                    <div className={styles.button_text}>Уже клиент заведения?</div>
+                                        onClick={()=>navigate('/sing_in')}>
+                                    <div className={styles.button_text} >Уже клиент заведения?</div>
                                 </button>
                             </form>
                         </div>
