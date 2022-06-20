@@ -8,7 +8,7 @@ const LayOut=()=>{
             <header className={styles.header}>
                 <div className={styles.container}>
                     <div className={styles.logo}><img src={logo} alt="logo"/>
-                        <a className={styles.logoTitle} href="/">Caffesta</a></div>
+                        <a className={styles.logoTitle} href="/caffesta_guest">Caffesta</a></div>
                 </div>
             </header>
         </div>

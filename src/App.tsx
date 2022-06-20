@@ -13,11 +13,12 @@ import QRCode from "./pages/user/qrCode/QRCode";
 import SingIn from "./pages/sing_in/SingIn";
 
 function App() {
+    //Адрес главной страницы должен подтягиваться с сервера
     return (
         <div className="App">
             <LayOut/>
             <Routes>
-                <Route path={'/'} element={<Main/>}/>
+                <Route path={'/caffesta_guest'} element={<Main/>}/>
                 <Route path={'/sing_up'} element={<SingUp/>}/>
                 <Route path={'/send_message'} element={<SendMessage/>}/>
                 <Route path={'/confirm_email'} element={<ConfirmEmail/>}/>
