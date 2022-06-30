@@ -3,48 +3,64 @@ import container from '../../components/LayOut/LayOut.module.css'
 import otherStyle from '../sing_up/singUp.module.css'
 import {useFormik} from "formik";
 import {useLocation, useNavigate} from "react-router-dom";
-type FormikError ={
-    email?:string
+import {verificationUser} from "../../store/infoUserSlice";
+import {RootState, useAppDispatch} from "../../store";
+import {useSelector} from "react-redux";
+
+type FormikError = {
+    email?: string
 }
 
 interface CustomizedState {
-    email: string
+    sendingEmail: string
+    login: string
 }
 
 const SendMessage = () => {
-    const navigate=useNavigate()
-    const location=useLocation()
-    const state = location.state as CustomizedState
-    const { email:userEmail } = state;
-    const formik=useFormik({
-        initialValues:{
-            email:''
+    const location = useLocation()
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+
+    const locationState = location.state as CustomizedState
+    const {sendingEmail: userEmail} = locationState;
+    const isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin)
+    const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage)
+
+    const formik = useFormik({
+        initialValues: {
+            email: ''
         },
-        validate:(values)=>{
-            const errors:FormikError={}
+        validate: (values) => {
+            const errors: FormikError = {}
             if (values.email.length) {
-                if (!/^[A-Z\d._%+-]+@[A-Z\d.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-                    errors.email = 'Неверный формат'
-                }
+                errors.email = 'Обязательное поле'
             }
             return errors
         },
-        onSubmit:values => {
-            alert(JSON.stringify(values))
+        onSubmit: values => {
+            dispatch(verificationUser({verificationCode: values.email, login: locationState.login}))
         }
     })
+
     const checkInputs = () => {
         return (!!Object.keys(formik.errors).length || !formik.getFieldProps('email').value)
     }
 
-    return(
+    if (isLogin) {
+        navigate('/user/qr_code', {state: locationState.login})
+    }
+
+
+    return (
         <div className={container.container}>
             <section className={style.sec_conf_1}>
-                <div className={otherStyle.description}>На почтовый ящик:  <span className={style.nowrap}>"{userEmail}",</span> <span
+                <div className={otherStyle.description}>На почтовый ящик: <span
+                    className={style.nowrap}>"{userEmail}",</span> <span
                     className={style.nowrap}>был отправлен код</span> для подтверждения регистрации
                 </div>
-                <div className="form">
-                    <form className={otherStyle.form_body} onSubmit={formik.handleSubmit} >
+
+                <div>
+                    <form className={otherStyle.form_body} onSubmit={formik.handleSubmit}>
                         <div className={otherStyle.form__item}>
                             <label className={style.label}>Введите полученный код</label>
                             <input className={style.valid}
@@ -53,10 +69,13 @@ const SendMessage = () => {
                                    {...formik.getFieldProps('email')}/>
                         </div>
                         {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
-                        <button className={`${otherStyle.submitButton} ${style.send_button} ${checkInputs()?otherStyle.submitButtonError:""}`} type="button"
-                                disabled={checkInputs()}
-                                onClick={()=>{navigate('/user/qr_code')}}>Войти в аккаунт
+                        <button
+                            className={`${otherStyle.submitButton} ${style.send_button} ${checkInputs() ? otherStyle.submitButtonError : ""}`}
+                            type="submit"
+                            disabled={checkInputs()}
+                        >Войти в аккаунт
                         </button>
+                        {!isLogin && <div>{requestMessage}</div>}
                     </form>
                 </div>
             </section>

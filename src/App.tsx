@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import Main from "./pages/main/Main";
 import {Route, Routes} from "react-router-dom";
@@ -11,14 +11,23 @@ import Accumulation from "./pages/user/accumulation/accumulation";
 import User from "./pages/user/User";
 import QRCode from "./pages/user/qrCode/QRCode";
 import SingIn from "./pages/sing_in/SingIn";
+import {useAppDispatch} from "./store";
+import {authMe} from './store/infoUserSlice'
+
 
 function App() {
-    //Адрес главной страницы должен подтягиваться с сервера
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(authMe())
+    }, [])
+
+
     return (
         <div className="App">
             <LayOut/>
             <Routes>
-                <Route path={'/caffesta_guest'} element={<Main/>}/>
+                <Route path={'/'} element={<Main/>}/>
                 <Route path={'/sing_up'} element={<SingUp/>}/>
                 <Route path={'/send_message'} element={<SendMessage/>}/>
                 <Route path={'/confirm_email'} element={<ConfirmEmail/>}/>
@@ -30,6 +39,7 @@ function App() {
                 </Route>
             </Routes>
         </div>
+
     );
 }
 

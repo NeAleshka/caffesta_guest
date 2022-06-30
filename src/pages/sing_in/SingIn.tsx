@@ -3,6 +3,10 @@ import styles from '../sing_up/singUp.module.css'
 import mainStyles from '../../components/LayOut/LayOut.module.css'
 import user from "../../images/input_icons/user.svg";
 import {useNavigate} from "react-router-dom";
+import {RootState, useAppDispatch} from "../../store";
+import {useSelector} from "react-redux";
+import {login} from "../../store/infoUserSlice";
+import {useEffect} from "react";
 
 type FormikErrorType = {
     login?: string
@@ -13,6 +17,9 @@ type FormikErrorType = {
 
 const SingIn = () => {
     const navigate = useNavigate()
+    const dispatch=useAppDispatch()
+    const requestMessage=useSelector<RootState,string>(state => state.infoUser.requestMessage)
+    const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
     const formik = useFormik({
         initialValues: {
             login: '',
@@ -34,12 +41,20 @@ const SingIn = () => {
             return errors
         },
         onSubmit: values => {
-            alert(JSON.stringify(values))// Переделать на post
+         dispatch(login({login:values.login,password: values.password}))
         }
     })
     const checkInputs = () => {
         return (!!Object.keys(formik.errors).length || !formik.getFieldProps('login').value)
     }
+
+    useEffect(()=>{
+        if(isVerification){
+            navigate('/user/qr_code',{state:formik.values.login})
+        }
+    },[isVerification])
+
+
     return(
         <div className={`${mainStyles.wrapper} ${mainStyles.flexCol}`}>
             <main>
@@ -72,9 +87,10 @@ const SingIn = () => {
                                 </div>
                                 <button
                                     className={`${styles.submitButton} ${checkInputs() ? styles.submitButtonError : ''}`
-                                    } type="submit" disabled={checkInputs()} onClick={() => navigate('/send_message')}
+                                    } type="submit" disabled={checkInputs()}
                                 >Вход
                                 </button>
+                                {!isVerification && <div>{requestMessage}</div>}
                             </form>
                         </div>
                     </section>

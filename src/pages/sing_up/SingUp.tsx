@@ -8,7 +8,10 @@ import {useFormik} from "formik";
 import {useNavigate} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {registrationUser} from "../../store/infoUserSlice";
+import {RootState, useAppDispatch} from "../../store";
 
 type FormikErrorType = {
     phone?: string
@@ -22,8 +25,11 @@ type FormikErrorType = {
 
 
 const SingUp = () => {
-    const [startDate,setStartDate]=useState(new Date())
+    const [startDate, setStartDate] = useState(new Date())
+    const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage)
+    let isSuccessRequest = useSelector<RootState, boolean>(state => state.infoUser.isSuccessRequest)
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const formik = useFormik({
         initialValues: {
             phone: '',
@@ -62,32 +68,40 @@ const SingUp = () => {
             }
             return errors
         },
-        onSubmit: values => {
-            alert(JSON.stringify(values))// Переделать на post
+        onSubmit: () => {
+            onSubmitClick()
+            formik.setTouched({phone: false, login: false, name: false, password: false})
         }
     })
 
-    const checkInputs = () => {
-        return (!!Object.keys(formik.errors).length || !formik.getFieldProps('phone').value)
+    const validTouched = formik.touched.phone || formik.touched.name || formik.touched.password || formik.touched.login
+
+    const validDate = (date: Date) => {
+        let day: string | number = date.getUTCDate()
+        let month: string | number = date.getUTCMonth() + 1
+        if (day <= 9) {
+            day = `0${day}`
+        }
+        if (month <= 9) {
+            month = `0${month}`
+        }
+        return `${day}.${month}.${date.getUTCFullYear()}`
+    }
+    const onSubmitClick = () => {
+        dispatch(registrationUser(formik.values))
     }
 
-    const validDate = (date:Date) => {
-    let day:string|number=date.getUTCDate()
-    let month:string|number=date.getUTCMonth()+1
-        if(day<=9){
-            day=`0${day}`
+    useEffect(() => {
+        if (isSuccessRequest) {
+            navigate('/send_message',{state: {email:formik.values.email,login:formik.values.login}})
         }
-        if(month<=9){
-            month=`0${month}`
-        }
-        return`${day}.${month}.${date.getUTCFullYear()}`
-    }
+    }, [isSuccessRequest])
 
     return (
         <div className={`${mainStyles.wrapper} ${mainStyles.flexCol}`}>
             <main>
                 <div className={mainStyles.container}>
-                    <section className={styles.secRegister}>
+                    <div className={styles.secRegister}>
                         <div className={styles.description}>Введите Ваши данные<br/>для регистрации</div>
                         <div className="form">
                             <form className={styles.form_body} onSubmit={formik.handleSubmit}>
@@ -97,9 +111,10 @@ const SingUp = () => {
                                            {...formik.getFieldProps('login')}
                                     />
                                     <div className={styles.input_icons}>
-                                        <img src={user} alt={'login'} />
+                                        <img src={user} alt={'login'}/>
                                     </div>
-                                    {formik.touched.login && formik.errors.login && <div className={styles.formik_errors}>{formik.errors.login}</div>}
+                                    {formik.touched.login && formik.errors.login &&
+                                        <div className={styles.formik_errors}>{formik.errors.login}</div>}
                                 </div>
                                 <div className={styles.form__item}>
                                     <input className={styles.input_data} type="text"
@@ -109,7 +124,8 @@ const SingUp = () => {
                                     <div className={styles.input_icons}>
                                         <img src={user} alt={'pass'}/>
                                     </div>
-                                    {formik.touched.password && formik.errors.password && <div className={styles.formik_errors}>{formik.errors.password}</div>}
+                                    {formik.touched.password && formik.errors.password &&
+                                        <div className={styles.formik_errors}>{formik.errors.password}</div>}
                                 </div>
                                 <div className={styles.form__item}>
                                     <input className={styles.input_data} type="tel"
@@ -119,7 +135,8 @@ const SingUp = () => {
                                     <div className={styles.input_icons}>
                                         <img src={phone} alt={'phone'}/>
                                     </div>
-                                    {formik.touched.phone && formik.errors.phone && <div className={styles.formik_errors}>{formik.errors.phone}</div>}
+                                    {formik.touched.phone && formik.errors.phone &&
+                                        <div className={styles.formik_errors}>{formik.errors.phone}</div>}
                                 </div>
                                 <div className={styles.form__item}>
                                     <input className={styles.input_data}
@@ -128,7 +145,8 @@ const SingUp = () => {
                                     <div className={styles.input_icons} style={{top: "15px"}}>
                                         <img src={email} alt={'email'}/>
                                     </div>
-                                    {formik.touched.email && formik.errors.email && <div className={styles.formik_errors}>{formik.errors.email}</div>}
+                                    {formik.touched.email && formik.errors.email &&
+                                        <div className={styles.formik_errors}>{formik.errors.email}</div>}
                                 </div>
                                 <div className={styles.form__item}>
                                     <input className={styles.input_data}
@@ -137,7 +155,8 @@ const SingUp = () => {
                                     <div className={styles.input_icons}>
                                         <img src={user} alt={'first name'}/>
                                     </div>
-                                    {formik.touched.name && formik.errors.name && <div className={styles.formik_errors}>{formik.errors.name}</div>}
+                                    {formik.touched.name && formik.errors.name &&
+                                        <div className={styles.formik_errors}>{formik.errors.name}</div>}
                                 </div>
                                 <div className={styles.form__item}>
                                     <input className={styles.input_data}
@@ -153,9 +172,9 @@ const SingUp = () => {
                                     <DatePicker className={`${styles.input_data} ${styles.data_picker}`}
                                                 selected={startDate}
                                                 {...formik.getFieldProps('birthday')}
-                                                onChange={(date)=>{
-                                                    const correctDate=validDate(date as Date)
-                                                    formik.setFieldValue('birthday',correctDate)
+                                                onChange={(date) => {
+                                                    const correctDate = validDate(date as Date)
+                                                    formik.setFieldValue('birthday', correctDate)
                                                     setStartDate(date as Date)
                                                 }}
                                                 placeholderText={'01.01.1999'}
@@ -167,13 +186,15 @@ const SingUp = () => {
                                         <div className={styles.formik_errors}>{formik.errors.birthday}</div>}
                                 </div>
                                 <button
-                                    className={`${styles.submitButton} ${checkInputs() ? styles.submitButtonError : ''}`
-                                    } type="submit" disabled={checkInputs()} onClick={() => navigate('/send_message')}
+                                    className={`${styles.submitButton} ${(!formik.isValid || !validTouched)? styles.submitButtonError : ''}`
+                                    } type="submit"
+                                    disabled={!formik.isValid || !validTouched}
                                 >Продолжить
                                 </button>
+                                {!isSuccessRequest && <div>{requestMessage}</div>}
                             </form>
                         </div>
-                    </section>
+                    </div>
                 </div>
             </main>
         </div>
