@@ -1,13 +1,14 @@
 import inputStyle from '../../sing_up/singUp.module.css'
+import styles from '../../sing_up/singUp.module.css'
 import container from '../../../components/LayOut/LayOut.module.css'
-import styles from "../../sing_up/singUp.module.css";
 import accStyle from './accumulation.module.css'
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store";
+import {IBonuses} from "../../../interfaces";
 
 const Accumulation = () => {
-    const bonus = 'Бонусы: 864'
-    const points = 'Баллы: 47'
-    const check = 'Счёт: 0 р.'
-    const sum = 'Сумма покупок: 32454 р.'
+    const bonuses=useSelector<RootState,IBonuses>(state => state.infoUser.info.bonuses as IBonuses)
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
 
     const validDate = () => {
         const date=new Date()
@@ -37,22 +38,23 @@ const Accumulation = () => {
     const date=validDate()
     const time=`${getCorrectHours()}:${getCorrectMin()}`
 
+    console.log('acc: '+ isLoading)
 
     return (
         <div className={`${container.container} ${accStyle.flex}`}>
             <div className={accStyle.description}>Ваши накопления на <br/> {date} г.,{time}</div>
             <div className={styles.form_body}>
                 <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={bonus} readOnly/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Бонусы: ${bonuses.bonus}`} readOnly/>
                 </div>
                 <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={points}/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Баллы: ${bonuses.points}`}/>
                 </div>
                 <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={check}/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Счёт: ${bonuses.check} р.`}/>
                 </div>
                 <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={sum}/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Сумма покупок: ${bonuses.sum} р.`}/>
                 </div>
             </div>
         </div>

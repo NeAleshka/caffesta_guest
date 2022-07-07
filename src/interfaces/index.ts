@@ -1,2 +1,2 @@
-export * from './loginResponse'
-export * from './authMe'
+export * from './userInterfaces'
+

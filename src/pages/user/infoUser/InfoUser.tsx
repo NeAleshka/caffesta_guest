@@ -3,76 +3,112 @@ import inputStyle from '../../sing_up/singUp.module.css'
 import infoStyle from './InfoUser.module.css'
 import {useEffect, useState} from "react";
 import {useSelector} from 'react-redux'
-import {authMe, changeInfo} from "../../../store/infoUserSlice";
+import {changeUserInfo, logout, setIsEdit} from "../../../store/infoUserSlice";
 import {RootState, useAppDispatch} from "../../../store";
-import {userDTO} from "../../../interfaces";
-
+import {IUserDTO} from "../../../interfaces";
+import {useFormik} from "formik";
+import {FormikErrorType} from "../../sing_up/SingUp";
+import styles from "../../sing_up/singUp.module.css";
+import {BounceLoader} from 'react-spinners'
 
 const InfoUser = () => {
-    const isNoEdit=useSelector<RootState,boolean>(state => state.infoUser.isEdit)
-    const disabledStyle=isNoEdit?`${infoStyle.disabled}`:''
-    const dataUser=useSelector<RootState,userDTO>(state => state.infoUser.info)
-    const dispatch=useAppDispatch()
-    const isLoding=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
-    const [infoUser,setInfoUser]=useState(dataUser)
+    let isNoEdit = useSelector<RootState, boolean>(state => state.infoUser.isEdit)
+    const disabledStyle = isNoEdit ? `${infoStyle.disabled}` : ''
+    const dataUser = useSelector<RootState, IUserDTO>(state => state.infoUser.info)
+    const dispatch = useAppDispatch()
+    const isLoading = useSelector<RootState, boolean>(state => state.infoUser.isLoading)
+    const [infoUser, setInfoUser] = useState(dataUser)
+    let mode = isNoEdit ? 'Редактировать профиль' : 'Сохранить'
 
-    const changePhone=(phone:string)=>{
-       setInfoUser({...infoUser,phone})
-    }
-    const changeEmail=(email:string)=>{
-       setInfoUser({...infoUser,email})
-    }
-    const changeName=(name:string)=>{
-        setInfoUser({...infoUser,name})
-    }
-    const changeLastName=(lastName:string)=>{
-        setInfoUser({...infoUser,lastName})
-    }
-
+    const formik = useFormik({
+        initialValues: {
+            phone: dataUser.phone ?? 'Нет данных',
+            email: dataUser.email ?? 'Нет данных',
+            name: dataUser.name ?? 'Нет данных',
+            lastName: dataUser.lastName ?? 'Нет данных'
+        },
+        validate: (values) => {
+            const errors: FormikErrorType = {}
+            if (values.name.length < 2) {
+                errors.name = 'Минимальная длина 2 символа'
+            }
+            if (values.lastName) {
+                errors.lastName = 'Минимальная длина 2 символа'
+            }
+            if (!values.phone) {
+                errors.phone = 'Обязательное поле'
+            }
+            if (!values.email.length) {
+                errors.email = 'Обязательное поле'
+            } else if (!/^[A-Z\d._%+-]+@[A-Z\d.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+                errors.email = 'Неверный формат'
+            }
+        },
+        onSubmit: (values) => {
+            if (mode === 'Сохранить') {
+                dispatch(changeUserInfo(values))
+            } else {
+                dispatch(setIsEdit(false))
+            }
+        }
+    })
 
 
     useEffect(() => {
-          dispatch(authMe())
-    }, [])
-
-    useEffect(()=>{
         setInfoUser(dataUser)
-    },[dataUser])
-
+    }, [dataUser])
 
     return (
         <div className={container.container}>
-            {isLoding? <div>Loading</div> :
-            <div className={inputStyle.form_body}>
-                <h3 style={{fontWeight: '400', marginTop: '30px'}}>{infoUser.name??'User Name'}</h3>
-                <div className={`${inputStyle.form__item} ${infoStyle.form_body}`}>
-                    <input className={`${inputStyle.input_data} ${disabledStyle}`}  disabled={isNoEdit}
-                    value={infoUser.phone}
-                    onChange={(event)=>changePhone(event.currentTarget.value)}
-                    />
-                </div>
-                <div className={inputStyle.form__item}>
-                    <input className={`${inputStyle.input_data} ${disabledStyle}`}  disabled={isNoEdit}
-                           onChange={(event)=>changeEmail(event.currentTarget.value)}
-                           value={infoUser.email}/>
-                </div>
-                <div className={inputStyle.form__item}>
-                    <input className={`${inputStyle.input_data} ${disabledStyle}`}  disabled={isNoEdit}
-                            onChange={(event)=>changeName(event.currentTarget.value)}
-                           value={infoUser.name}/>
-                </div>
-                <div className={inputStyle.form__item}>
-                    <input className={`${inputStyle.input_data} ${disabledStyle}`}
-                           onChange={(event)=>changeLastName(event.currentTarget.value)}
-                           disabled={isNoEdit}
-                           value={infoUser.lastName}/>
-                </div>
-                <button className={`${infoStyle.button} ${infoStyle.blue_button} ${isNoEdit?'':infoStyle.save_change}` }
-                onClick={()=>dispatch(changeInfo({infoUser,isNoEdit}))}>
-                    {isNoEdit?'Редактировать профиль':'Сохранить'}
-                </button>
-                <button className={`${infoStyle.button} ${infoStyle.button_red}`} style={isNoEdit?{}:{display:"none"}}>Выйти</button>
-            </div>
+            {isLoading ? <div>
+                <BounceLoader color={'blue'}/>
+                </div> :
+                <form className={inputStyle.form_body} onSubmit={formik.handleSubmit}>
+                    <h3 style={{fontWeight: '400', marginTop: '30px'}}>{dataUser.name ?? 'User Name'}</h3>
+                    <div className={`${inputStyle.form__item} ${infoStyle.form_body}`}>
+                        <input className={`${inputStyle.input_data} ${disabledStyle}`} disabled={isNoEdit}
+                               type={'tel'}
+                               placeholder={infoUser.phone}
+                               {...formik.getFieldProps('phone')}
+                        />
+                    </div>
+                    {formik.touched.phone && formik.errors.phone &&
+                        <div className={styles.formik_errors}>{formik.errors.phone}</div>}
+                    <div className={inputStyle.form__item}>
+                        <input className={`${inputStyle.input_data} ${disabledStyle}`} disabled={isNoEdit}
+                               type={'text'}
+                               placeholder={infoUser.email}
+                               {...formik.getFieldProps('email')}
+                        />
+                    </div>
+                    {formik.touched.email && formik.errors.email &&
+                        <div className={styles.formik_errors}>{formik.errors.email}</div>}
+                    <div className={inputStyle.form__item}>
+                        <input className={`${inputStyle.input_data} ${disabledStyle}`} disabled={isNoEdit}
+                               placeholder={infoUser.name}
+                               {...formik.getFieldProps('name')}
+                        />
+                    </div>
+                    {formik.touched.name && formik.errors.name &&
+                        <div className={styles.formik_errors}>{formik.errors.name}</div>}
+                    <div className={inputStyle.form__item}>
+                        <input className={`${inputStyle.input_data} ${disabledStyle}`}
+                               disabled={isNoEdit}
+                               placeholder={infoUser.lastName}
+                               {...formik.getFieldProps('lastName')}
+                        />
+                    </div>
+                    {formik.touched.lastName && formik.errors.lastName &&
+                        <div className={styles.formik_errors}>{formik.errors.lastName}</div>}
+                    <button
+                        className={`${infoStyle.button} ${infoStyle.blue_button} ${isNoEdit ? '' : infoStyle.save_change}`}
+                        type='submit'>
+                        {mode}
+                    </button>
+                    <button className={`${infoStyle.button} ${infoStyle.button_red}`}
+                            style={isNoEdit ? {} : {display: "none"}} onClick={() => dispatch(logout())}>Выйти
+                    </button>
+                </form>
             }
         </div>
     )

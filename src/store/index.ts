@@ -8,9 +8,9 @@ const store = configureStore({
     reducer: {
         infoUser: infoUserReducer
     },
-    middleware: getDefaultMiddleware({
+   /* middleware: getDefaultMiddleware({
         serializableCheck: false,
-    }),
+    }),*/
 })
 
 export type RootState = ReturnType<typeof store.getState>

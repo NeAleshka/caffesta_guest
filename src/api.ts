@@ -1,37 +1,37 @@
 import axios from "axios";
-import {AuthMe, infoUserType, LoginResponse, userDTO} from "./interfaces";
+import {IUserInfo, ILoginResponse, IUserDTO, IAuthMe} from "./interfaces";
+
 
 const instants=axios.create({
-    baseURL:'http://localhost:5000/auth/',
+    baseURL: 'http://localhost:5000/auth/',
+    withCredentials: true
 })
-
-
-instants.interceptors.request.use((config)=>{
-    if (config.headers)
-   config.headers.Authorization=`Bearer ${localStorage.getItem('accessToken')}`
-    return config
-})
-
-
 
 const userApi={
-    reg(data:infoUserType){
-      return instants.post<'',{ data: LoginResponse}>('registration',{...data})
+    reg(data:IUserInfo){
+      return instants.post<IUserInfo,{ data: ILoginResponse}>('registration',{...data}).then(res=>res.data)
     },
-    me(){
-        return instants.get('authMe').then(res=>res.data)
+    me(refreshToken: string){
+        return instants.get('authMe', {
+            headers: {
+                'cookies': refreshToken
+            }
+        }).then(res=>res.data)
     },
-    userVerification( data:{verificationCode: string, login: string}){
-        return instants.post<{data:{verificationCode:string,login:string} },{data: { isVerification: boolean, message: string,userData:userDTO }}>('verification',{...data})
-    },
-    fetchInfo(login:string){
-        return instants.post<'', {data: userDTO }>('user/info',{login})
+    userVerification( verificationCode: string){
+        return instants.post<{data:{verificationCode:string,login:string} },{data: { isVerification: boolean, message: string,userData:IUserDTO }}>('verification',{verificationCode}).then(res=>res.data)
     },
     sendVerificationCode(email:string,login:string){
-        return instants.post<{email:string,login:string}, { data: { isVerification: boolean } }>('confirm_email',{email,login})
+        return instants.post<{email:string,login:string}, { data: { isVerification: boolean }}>('confirm_email',{email,login}).then(res=>res.data)
     },
     login(login:string,password:string){
-        return instants.post<{login:string,password:string},{ data: LoginResponse}>('login',{login,password}).then(res=>res.data)
+        return instants.post<{login:string,password:string},{ data: ILoginResponse}>('login',{login,password}).then(res=>res.data)
+    },
+    logout(){
+        return instants.post('logout')
+    },
+    changeInfo(data:IUserDTO) {
+        return instants.put<IUserDTO, { data: IUserDTO }>('change_info',{...data}).then(res=>res.data)
     }
 }
 

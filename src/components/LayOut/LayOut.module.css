@@ -24,7 +24,8 @@
     align-items: center;
 
 }
-.logo{
+
+.logo {
     display: flex;
     width: 100%;
     -webkit-box-align: center;
@@ -32,6 +33,9 @@
     justify-content: center;
 }
 
+.logo img {
+    height: 60px;
+}
 
 .logoTitle {
     font-size: 40px;
@@ -42,9 +46,11 @@
     text-decoration: none;
     padding-left: 15px;
 }
-.logoTitle:hover{
+
+.logoTitle:hover {
     opacity: .7;
 }
+
 .wrapper {
     min-height: 100%;
 }

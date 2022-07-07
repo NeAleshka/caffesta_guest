@@ -7,6 +7,8 @@ import {RootState, useAppDispatch} from "../../store";
 import {useSelector} from "react-redux";
 import {login} from "../../store/infoUserSlice";
 import {useEffect} from "react";
+import {BarLoader} from 'react-spinners'
+
 
 type FormikErrorType = {
     login?: string
@@ -20,6 +22,7 @@ const SingIn = () => {
     const dispatch=useAppDispatch()
     const requestMessage=useSelector<RootState,string>(state => state.infoUser.requestMessage)
     const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
     const formik = useFormik({
         initialValues: {
             login: '',
@@ -57,45 +60,47 @@ const SingIn = () => {
 
     return(
         <div className={`${mainStyles.wrapper} ${mainStyles.flexCol}`}>
-            <main>
-                <div className={mainStyles.container}>
-                    <section className={styles.secRegister}>
-                        <div className={styles.description}>Введите Логин и<br/> Пароль указанные
-                        <br/>при регистрации
-                        </div>
-                        <div className="form">
-                            <form className={styles.form_body} onSubmit={formik.handleSubmit}>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data} type="text"
-                                           placeholder="Логин"
-                                           {...formik.getFieldProps('login')}
-                                    />
-                                    <div className={styles.input_icons}>
-                                        <img src={user} alt={'login'}/>
+                <main>
+                    <div className={mainStyles.container}>
+                        <section className={styles.secRegister}>
+                            <div className={styles.description}>Введите Логин и<br/> Пароль указанные
+                                <br/>при регистрации
+                            </div>
+                            <div className="form">
+                                <form className={styles.form_body} onSubmit={formik.handleSubmit}>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data} type="text"
+                                               placeholder="Логин"
+                                               {...formik.getFieldProps('login')}
+                                        />
+                                        <div className={styles.input_icons}>
+                                            <img src={user} alt={'login'}/>
+                                        </div>
+                                        {formik.touched.login && formik.errors.login &&
+                                            <div className={styles.formik_errors}>{formik.errors.login}</div>}
                                     </div>
-                                    {formik.touched.login && formik.errors.login && <div className={styles.formik_errors}>{formik.errors.login}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data} type="password"
-                                           placeholder="Пароль"
-                                           {...formik.getFieldProps('password')}
-                                    />
-                                    <div className={styles.input_icons}>
-                                        <img src={user} alt={'pass'}/>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data} type="password"
+                                               placeholder="Пароль"
+                                               {...formik.getFieldProps('password')}
+                                        />
+                                        <div className={styles.input_icons}>
+                                            <img src={user} alt={'pass'}/>
+                                        </div>
+                                        {formik.touched.password && formik.errors.login &&
+                                            <div className={styles.formik_errors}>{formik.errors.password}</div>}
                                     </div>
-                                    {formik.touched.password && formik.errors.login && <div className={styles.formik_errors}>{formik.errors.password}</div>}
-                                </div>
-                                <button
-                                    className={`${styles.submitButton} ${checkInputs() ? styles.submitButtonError : ''}`
-                                    } type="submit" disabled={checkInputs()}
-                                >Вход
-                                </button>
-                                {!isVerification && <div>{requestMessage}</div>}
-                            </form>
-                        </div>
-                    </section>
-                </div>
-            </main>
+                                    <button
+                                        className={`${styles.submitButton} ${checkInputs() ? styles.submitButtonError : ''}`
+                                        } type="submit" disabled={checkInputs()}
+                                    >Вход
+                                    </button>
+                                    {!isVerification && <div>{requestMessage}</div>}
+                                </form>
+                            </div>
+                        </section>
+                    </div>
+                </main>
         </div>
     )
 }

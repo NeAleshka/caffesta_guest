@@ -2,17 +2,15 @@ import styles from './main.module.css'
 import {Outlet, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
-import {useEffect} from "react";
 
 const Main=()=>{
     const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
     const navigate=useNavigate()
 
-    useEffect(()=>{
-        if (isLogin){
-            navigate('/user/qr_code')
-        }
-    },[isLogin])
+
+    if(isLogin){
+        navigate('/user/qr_code')
+    }
 
     return(
         <div className={styles.flexCol}>

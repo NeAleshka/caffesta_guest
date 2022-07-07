@@ -20,7 +20,6 @@ const SendMessage = () => {
     const location = useLocation()
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
-
     const locationState = location.state as CustomizedState
     const {sendingEmail: userEmail} = locationState;
     const isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin)
@@ -38,7 +37,7 @@ const SendMessage = () => {
             return errors
         },
         onSubmit: values => {
-            dispatch(verificationUser({verificationCode: values.email, login: locationState.login}))
+            dispatch(verificationUser(values.email))
         }
     })
 

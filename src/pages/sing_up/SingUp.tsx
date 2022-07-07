@@ -13,7 +13,7 @@ import {useSelector} from "react-redux";
 import {registrationUser} from "../../store/infoUserSlice";
 import {RootState, useAppDispatch} from "../../store";
 
-type FormikErrorType = {
+export type FormikErrorType = {
     phone?: string
     email?: string
     name?: string

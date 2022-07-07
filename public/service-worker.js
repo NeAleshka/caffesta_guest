@@ -33,7 +33,6 @@ self.addEventListener('install', function(event) {
                             // Открываем и кэшируем нужные страницы и файлы
                             const urlsToCache = ['./src/App.tsx','/favicon.ico']
                             cache.addAll(urlsToCache)
-                            console.log('cached');
                         })
                 })
         );
