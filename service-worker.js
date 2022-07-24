@@ -27,17 +27,17 @@ workbox.precaching.precacheAndRoute([{
     "revision": "99dbb1ac10f49b8b1fcc4879f60b7313",
     "url": "favicon.ico"
 }, {
-    "revision": "31aed546ded10cc4f78ac847b857f18a",
+    "revision": "304a1136f608847a68c957e5cda455de",
     "url": "index.html"
 }, {
     "revision": "6fd885036a48c65dc1c9476777ddfc83",
     "url": "static/css/main.accd9ff3.css"
 }, {
-    "revision": "c02707f96adb01d9981185c8d500653c",
-    "url": "static/js/main.42e89394.js"
+    "revision": "3445cd289236155e359f4ec9d70c70d4",
+    "url": "static/js/main.3121abda.js"
 }, {
-    "revision": "bc9520ea17b2e9685ba5961e7d87ed17",
-    "url": "manifest.json"
+    "revision": "7f07a05a6495c02081ce296965f22beb",
+    "url": "asset-manifest.json"
 }, {
     "revision": "b578821088f639079d5dd8764b0ca38e",
     "url": "static/media/Calendar.10a98c21b62903a00d416f25939ddeae.svg"
@@ -71,8 +71,4 @@ workbox.precaching.precacheAndRoute([{
 }, {
     "revision": "3c6a7d3ae76a5aec78aac69db1af15cf",
     "url": "static/media/Geometria.b7f74b260291c82461d1.woff"
-}, {
-    "revision": "cd42d299828c8762ff81eb5f1fe73dd2",
-    "url": "offline.html"
-    },
-])
+}, {"revision": "cd42d299828c8762ff81eb5f1fe73dd2", "url": "offline.html"}])
