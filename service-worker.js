@@ -12,10 +12,6 @@ const setCacheName = workbox.core.setCacheNameDetails
 const {PrecacheController} = workbox.precaching
 const precacheController = new PrecacheController()
 
-precacheController.addToCacheList([
-    {url: '/auth/login', revision: null},
-    {url: '/auth/authMe', revision: null},
-]);
 
 setCacheName({
     prefix: 'guest',
