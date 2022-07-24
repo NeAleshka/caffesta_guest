@@ -7,6 +7,14 @@ workbox.setConfig({
 
 const cacheName = workbox.core.cacheNames.precache
 const setCacheName = workbox.core.setCacheNameDetails
+
+const precacheController = workbox.precaching
+
+precacheController.addToCacheList([
+    {url: '/', revision: null},
+    {url: '/auth', revision: null},
+]);
+
 setCacheName({
     prefix: 'guest',
     suffix: 'v1',
@@ -15,13 +23,13 @@ setCacheName({
     googleAnalytics: 'ga',
 });
 workbox.core.clientsClaim();
-self.addEventListener('fetch', function (event) {
+/*self.addEventListener('fetch', function (event) {
     event.respondWith(
         caches.match(event.request).then(function (response) {
             return response || fetch(event.request);
         }),
     );
-});
+});*/
 
 workbox.precaching.precacheAndRoute([{
     "revision": "99dbb1ac10f49b8b1fcc4879f60b7313",
@@ -71,7 +79,4 @@ workbox.precaching.precacheAndRoute([{
 }, {
     "revision": "3c6a7d3ae76a5aec78aac69db1af15cf",
     "url": "static/media/Geometria.b7f74b260291c82461d1.woff"
-}, {"revision": "cd42d299828c8762ff81eb5f1fe73dd2", "url": "offline.html"},
-    {url: '/auth', revision: null},
-    {url: '/login', revision: null},
-])
+}, {"revision": "cd42d299828c8762ff81eb5f1fe73dd2", "url": "offline.html"}])
