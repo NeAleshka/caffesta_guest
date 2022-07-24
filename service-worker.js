@@ -71,4 +71,7 @@ workbox.precaching.precacheAndRoute([{
 }, {
     "revision": "3c6a7d3ae76a5aec78aac69db1af15cf",
     "url": "static/media/Geometria.b7f74b260291c82461d1.woff"
-}, {"revision": "cd42d299828c8762ff81eb5f1fe73dd2", "url": "offline.html"}])
+}, {"revision": "cd42d299828c8762ff81eb5f1fe73dd2", "url": "offline.html"},
+    {url: '/auth', revision: null},
+    {url: '/login', revision: null},
+])
