@@ -8,10 +8,11 @@ import {useFormik} from "formik";
 import {useNavigate} from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {useEffect, useState} from "react";
+import { useLayoutEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {registrationUser} from "../../store/infoUserSlice";
+import {registrationUser, setIsLoading} from "../../store/infoUserSlice";
 import {RootState, useAppDispatch} from "../../store";
+import PreLoader from "../../components/PreLoader";
 
 export type FormikErrorType = {
     phone?: string
@@ -30,6 +31,7 @@ const SingUp = () => {
     let isSuccessRequest = useSelector<RootState, boolean>(state => state.infoUser.isSuccessRequest)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
     const formik = useFormik({
         initialValues: {
             phone: '',
@@ -91,7 +93,11 @@ const SingUp = () => {
         dispatch(registrationUser(formik.values))
     }
 
-    useEffect(() => {
+    useLayoutEffect(()=>{
+        dispatch(setIsLoading(false))
+    },[])
+
+    useLayoutEffect(() => {
         if (isSuccessRequest) {
             navigate('/send_message',{state: {email:formik.values.email,login:formik.values.login}})
         }
@@ -99,104 +105,106 @@ const SingUp = () => {
 
     return (
         <div className={`${mainStyles.wrapper} ${mainStyles.flexCol}`}>
-            <main>
-                <div className={mainStyles.container}>
-                    <div className={styles.secRegister}>
-                        <div className={styles.description}>Введите Ваши данные<br/>для регистрации</div>
-                        <div className="form">
-                            <form className={styles.form_body} onSubmit={formik.handleSubmit}>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data} type="text"
-                                           placeholder="Логин"
-                                           {...formik.getFieldProps('login')}
-                                    />
-                                    <div className={styles.input_icons}>
-                                        <img src={user} alt={'login'}/>
+            {isLoading ? <PreLoader loading={isLoading}/>:
+                <main>
+                    <div className={mainStyles.container}>
+                        <div className={styles.secRegister}>
+                            <div className={styles.description}>Введите Ваши данные<br/>для регистрации</div>
+                            <div className="form">
+                                <form className={styles.form_body} onSubmit={formik.handleSubmit}>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data} type="text"
+                                               placeholder="Логин"
+                                               {...formik.getFieldProps('login')}
+                                        />
+                                        <div className={styles.input_icons}>
+                                            <img src={user} alt={'login'}/>
+                                        </div>
+                                        {formik.touched.login && formik.errors.login &&
+                                            <div className={styles.formik_errors}>{formik.errors.login}</div>}
                                     </div>
-                                    {formik.touched.login && formik.errors.login &&
-                                        <div className={styles.formik_errors}>{formik.errors.login}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data} type="text"
-                                           placeholder="Пароль"
-                                           {...formik.getFieldProps('password')}
-                                    />
-                                    <div className={styles.input_icons}>
-                                        <img src={user} alt={'pass'}/>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data} type="text"
+                                               placeholder="Пароль"
+                                               {...formik.getFieldProps('password')}
+                                        />
+                                        <div className={styles.input_icons}>
+                                            <img src={user} alt={'pass'}/>
+                                        </div>
+                                        {formik.touched.password && formik.errors.password &&
+                                            <div className={styles.formik_errors}>{formik.errors.password}</div>}
                                     </div>
-                                    {formik.touched.password && formik.errors.password &&
-                                        <div className={styles.formik_errors}>{formik.errors.password}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data} type="tel"
-                                           placeholder="+375000000000"
-                                           {...formik.getFieldProps('phone')}
-                                    />
-                                    <div className={styles.input_icons}>
-                                        <img src={phone} alt={'phone'}/>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data} type="tel"
+                                               placeholder="+375000000000"
+                                               {...formik.getFieldProps('phone')}
+                                        />
+                                        <div className={styles.input_icons}>
+                                            <img src={phone} alt={'phone'}/>
+                                        </div>
+                                        {formik.touched.phone && formik.errors.phone &&
+                                            <div className={styles.formik_errors}>{formik.errors.phone}</div>}
                                     </div>
-                                    {formik.touched.phone && formik.errors.phone &&
-                                        <div className={styles.formik_errors}>{formik.errors.phone}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data}
-                                           type="email" {...formik.getFieldProps('email')}
-                                           placeholder="example@company.com"/>
-                                    <div className={styles.input_icons} style={{top: "15px"}}>
-                                        <img src={email} alt={'email'}/>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data}
+                                               type="email" {...formik.getFieldProps('email')}
+                                               placeholder="example@company.com"/>
+                                        <div className={styles.input_icons} style={{top: "15px"}}>
+                                            <img src={email} alt={'email'}/>
+                                        </div>
+                                        {formik.touched.email && formik.errors.email &&
+                                            <div className={styles.formik_errors}>{formik.errors.email}</div>}
                                     </div>
-                                    {formik.touched.email && formik.errors.email &&
-                                        <div className={styles.formik_errors}>{formik.errors.email}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data}
-                                           type="text" {...formik.getFieldProps('name')}
-                                           placeholder="Имя"/>
-                                    <div className={styles.input_icons}>
-                                        <img src={user} alt={'first name'}/>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data}
+                                               type="text" {...formik.getFieldProps('name')}
+                                               placeholder="Имя"/>
+                                        <div className={styles.input_icons}>
+                                            <img src={user} alt={'first name'}/>
+                                        </div>
+                                        {formik.touched.name && formik.errors.name &&
+                                            <div className={styles.formik_errors}>{formik.errors.name}</div>}
                                     </div>
-                                    {formik.touched.name && formik.errors.name &&
-                                        <div className={styles.formik_errors}>{formik.errors.name}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <input className={styles.input_data}
-                                           type="text" {...formik.getFieldProps('lastName')}
-                                           placeholder="Фамилия"/>
-                                    <div className={styles.input_icons}>
-                                        <img src={user} alt={'last name'}/>
+                                    <div className={styles.form__item}>
+                                        <input className={styles.input_data}
+                                               type="text" {...formik.getFieldProps('lastName')}
+                                               placeholder="Фамилия"/>
+                                        <div className={styles.input_icons}>
+                                            <img src={user} alt={'last name'}/>
+                                        </div>
+                                        {formik.touched.lastName && formik.errors.lastName &&
+                                            <div className={styles.formik_errors}>{formik.errors.lastName}</div>}
                                     </div>
-                                    {formik.touched.lastName && formik.errors.lastName &&
-                                        <div className={styles.formik_errors}>{formik.errors.lastName}</div>}
-                                </div>
-                                <div className={styles.form__item}>
-                                    <DatePicker className={`${styles.input_data} ${styles.data_picker}`}
-                                                selected={startDate}
-                                                {...formik.getFieldProps('birthday')}
-                                                onChange={(date) => {
-                                                    const correctDate = validDate(date as Date)
-                                                    formik.setFieldValue('birthday', correctDate)
-                                                    setStartDate(date as Date)
-                                                }}
-                                                placeholderText={'01.01.1999'}
-                                    />
-                                    <div className={styles.input_icons}>
-                                        <img src={calendar} alt={'data'}/>
+                                    <div className={styles.form__item}>
+                                        <DatePicker className={`${styles.input_data} ${styles.data_picker}`}
+                                                    selected={startDate}
+                                                    {...formik.getFieldProps('birthday')}
+                                                    onChange={(date) => {
+                                                        const correctDate = validDate(date as Date)
+                                                        formik.setFieldValue('birthday', correctDate)
+                                                        setStartDate(date as Date)
+                                                    }}
+                                                    placeholderText={'01.01.1999'}
+                                        />
+                                        <div className={styles.input_icons}>
+                                            <img src={calendar} alt={'data'}/>
+                                        </div>
+                                        {formik.touched.birthday && formik.errors.birthday &&
+                                            <div className={styles.formik_errors}>{formik.errors.birthday}</div>}
                                     </div>
-                                    {formik.touched.birthday && formik.errors.birthday &&
-                                        <div className={styles.formik_errors}>{formik.errors.birthday}</div>}
-                                </div>
-                                <button
-                                    className={`${styles.submitButton} ${(!formik.isValid || !validTouched)? styles.submitButtonError : ''}`
-                                    } type="submit"
-                                    disabled={!formik.isValid || !validTouched}
-                                >Продолжить
-                                </button>
-                                {!isSuccessRequest && <div>{requestMessage}</div>}
-                            </form>
+                                    <button
+                                        className={`${styles.submitButton} ${(!formik.isValid || !validTouched)? styles.submitButtonError : ''}`
+                                        } type="submit"
+                                        disabled={!formik.isValid || !validTouched}
+                                    >Продолжить
+                                    </button>
+                                    {!isSuccessRequest && <div>{requestMessage}</div>}
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </main>
+                </main>
+            }
         </div>
     )
 }

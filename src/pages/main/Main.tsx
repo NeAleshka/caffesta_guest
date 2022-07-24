@@ -1,15 +1,21 @@
 import styles from './main.module.css'
 import {Outlet, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import {RootState, useAppDispatch} from "../../store";
+import {setIsLoading} from "../../store/infoUserSlice";
 
 const Main=()=>{
     const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
     const navigate=useNavigate()
-
+    const dispatch=useAppDispatch()
 
     if(isLogin){
         navigate('/user/qr_code')
+    }
+
+    const onClick = () => {
+        dispatch(setIsLoading(true))
+        navigate('/sing_up')
     }
 
     return(
@@ -19,9 +25,10 @@ const Main=()=>{
                     <section className={styles.sec_login}>
                         <div className="form">
                             <form className={styles.form__body} >
-                                <button className={styles.type1}
-                                        onClick={()=>navigate('/sing_up')}>
-                                    <div className={styles.button_text}>Зарегистрироваться</div>
+                                <button className={styles.type1}>
+                                    <div className={styles.button_text}
+                                         onClick={()=>onClick()}
+                                    >Зарегистрироваться</div>
                                 </button>
                             </form>
                             <form className={styles.form__body} >

@@ -38,23 +38,21 @@ const Accumulation = () => {
     const date=validDate()
     const time=`${getCorrectHours()}:${getCorrectMin()}`
 
-    console.log('acc: '+ isLoading)
-
     return (
         <div className={`${container.container} ${accStyle.flex}`}>
             <div className={accStyle.description}>Ваши накопления на <br/> {date} г.,{time}</div>
             <div className={styles.form_body}>
-                <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Бонусы: ${bonuses.bonus}`} readOnly/>
+                <div className={inputStyle.form__item} >
+                    <input  className={`${styles.input_data} ${accStyle.input}`} value={`Бонусы: ${bonuses.bonus}`} readOnly/>
                 </div>
-                <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Баллы: ${bonuses.points}`}/>
+                <div className={inputStyle.form__item} aria-readonly={true}>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Баллы: ${bonuses.points}`} readOnly/>
                 </div>
-                <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Счёт: ${bonuses.check} р.`}/>
+                <div className={inputStyle.form__item} aria-readonly={true}>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Счёт: ${bonuses.check} р.`} readOnly/>
                 </div>
-                <div className={inputStyle.form__item}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Сумма покупок: ${bonuses.sum} р.`}/>
+                <div className={inputStyle.form__item} aria-readonly={true}>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Сумма покупок: ${bonuses.sum} р.`} readOnly/>
                 </div>
             </div>
         </div>

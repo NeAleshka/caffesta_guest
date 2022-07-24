@@ -3,10 +3,11 @@ import container from '../../components/LayOut/LayOut.module.css'
 import otherStyle from '../sing_up/singUp.module.css'
 import {useFormik} from "formik";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useLayoutEffect} from "react";
 import {RootState, useAppDispatch} from "../../store";
-import {sendVerificationCode} from "../../store/infoUserSlice";
+import {sendVerificationCode, setIsLoading} from "../../store/infoUserSlice";
 import {useSelector} from "react-redux";
+import PreLoader from "../../components/PreLoader";
 
 type FormikError = {
     email?: string
@@ -22,7 +23,7 @@ const SendMessage = () => {
     const dispatch = useAppDispatch()
     const stateLocation = useLocation().state as locationStateType
     const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isVerification)
-
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
 
     const formik = useFormik({
         initialValues: {
@@ -51,34 +52,36 @@ const SendMessage = () => {
         }
     },[isVerification])
 
-
+    console.log('sendMessage ', isLoading);
 
     return (
         <div className={container.container}>
-            <section className={style.sec_conf_1}>
-                <div className={otherStyle.description}>Для входа нужно указать <span
-                    className={style.nowrap}>E-mail,</span> <span
-                    className={style.nowrap}>с которого</span> была регистрация <span
-                    className={style.nowrap}>и ввести</span> полученный код
-                </div>
-                <div className="form">
-                    <form className={otherStyle.form_body} onSubmit={formik.handleSubmit}>
-                        <div className={otherStyle.form__item}>
-                            <label className={style.label}>Введите Ваш E-mail</label>
-                            <input className={style.valid}
-                                   placeholder="example@company.com"
-                                   {...formik.getFieldProps('email')}/>
-                        </div>
-                        {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
-                        <button
-                            className={`${otherStyle.submitButton} ${style.send_button} ${checkInputs() ? otherStyle.submitButtonError : ""}`}
-                            type="submit"
-                            disabled={checkInputs()}>Получить код
-                        </button>
-                        {!isVerification}
-                    </form>
-                </div>
-            </section>
+            {isLoading ? <PreLoader loading={isLoading}/>:
+                <section className={style.sec_conf_1}>
+                    <div className={otherStyle.description}>Для входа нужно указать <span
+                        className={style.nowrap}>E-mail,</span> <span
+                        className={style.nowrap}>с которого</span> была регистрация <span
+                        className={style.nowrap}>и ввести</span> полученный код
+                    </div>
+                    <div className="form">
+                        <form className={otherStyle.form_body} onSubmit={formik.handleSubmit}>
+                            <div className={otherStyle.form__item}>
+                                <label className={style.label}>Введите Ваш E-mail</label>
+                                <input className={style.valid}
+                                       placeholder="example@company.com"
+                                       {...formik.getFieldProps('email')}/>
+                            </div>
+                            {formik.touched.email && formik.errors.email && <div>{formik.errors.email}</div>}
+                            <button
+                                className={`${otherStyle.submitButton} ${style.send_button} ${checkInputs() ? otherStyle.submitButtonError : ""}`}
+                                type="submit"
+                                disabled={checkInputs()}>Получить код
+                            </button>
+                            {!isVerification}
+                        </form>
+                    </div>
+                </section>
+            }
         </div>
     )
 }

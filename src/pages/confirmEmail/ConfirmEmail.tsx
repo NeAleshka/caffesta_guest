@@ -6,6 +6,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {verificationUser} from "../../store/infoUserSlice";
 import {RootState, useAppDispatch} from "../../store";
 import {useSelector} from "react-redux";
+import PreLoader from "../../components/PreLoader";
 
 type FormikError = {
     email?: string
@@ -22,6 +23,7 @@ const SendMessage = () => {
     const navigate = useNavigate()
     const locationState = location.state as CustomizedState
     const {sendingEmail: userEmail} = locationState;
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
     const isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin)
     const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage)
 
@@ -45,6 +47,7 @@ const SendMessage = () => {
         return (!!Object.keys(formik.errors).length || !formik.getFieldProps('email').value)
     }
 
+
     if (isLogin) {
         navigate('/user/qr_code', {state: locationState.login})
     }
@@ -52,7 +55,8 @@ const SendMessage = () => {
 
     return (
         <div className={container.container}>
-            <section className={style.sec_conf_1}>
+            {isLoading? <PreLoader loading={isLoading}/> :
+                <section className={style.sec_conf_1}>
                 <div className={otherStyle.description}>На почтовый ящик: <span
                     className={style.nowrap}>"{userEmail}",</span> <span
                     className={style.nowrap}>был отправлен код</span> для подтверждения регистрации
@@ -77,7 +81,7 @@ const SendMessage = () => {
                         {!isLogin && <div>{requestMessage}</div>}
                     </form>
                 </div>
-            </section>
+            </section>}
         </div>
     )
 }

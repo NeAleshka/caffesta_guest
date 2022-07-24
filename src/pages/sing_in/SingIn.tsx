@@ -5,9 +5,9 @@ import user from "../../images/input_icons/user.svg";
 import {useNavigate} from "react-router-dom";
 import {RootState, useAppDispatch} from "../../store";
 import {useSelector} from "react-redux";
-import {login} from "../../store/infoUserSlice";
-import {useEffect} from "react";
-import {BarLoader} from 'react-spinners'
+import {login, setIsLoading} from "../../store/infoUserSlice";
+import {useEffect, useLayoutEffect} from "react";
+import PreLoader from "../../components/PreLoader";
 
 
 type FormikErrorType = {
@@ -51,6 +51,10 @@ const SingIn = () => {
         return (!!Object.keys(formik.errors).length || !formik.getFieldProps('login').value)
     }
 
+    useLayoutEffect(()=>{
+        dispatch(setIsLoading(false))
+    },[])
+
     useEffect(()=>{
         if(isVerification){
             navigate('/user/qr_code',{state:formik.values.login})
@@ -60,6 +64,7 @@ const SingIn = () => {
 
     return(
         <div className={`${mainStyles.wrapper} ${mainStyles.flexCol}`}>
+            {isLoading? <PreLoader loading={isLoading}/>:
                 <main>
                     <div className={mainStyles.container}>
                         <section className={styles.secRegister}>
@@ -101,6 +106,7 @@ const SingIn = () => {
                         </section>
                     </div>
                 </main>
+            }
         </div>
     )
 }

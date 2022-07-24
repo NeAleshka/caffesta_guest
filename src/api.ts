@@ -1,5 +1,5 @@
 import axios from "axios";
-import {IUserInfo, ILoginResponse, IUserDTO, IAuthMe} from "./interfaces";
+import {IUserInfo, ILoginResponse, IUserDTO} from "./interfaces";
 
 
 const instants=axios.create({

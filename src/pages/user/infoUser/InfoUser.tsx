@@ -53,7 +53,6 @@ const InfoUser = () => {
         }
     })
 
-
     useEffect(() => {
         setInfoUser(dataUser)
     }, [dataUser])
@@ -104,9 +103,6 @@ const InfoUser = () => {
                         className={`${infoStyle.button} ${infoStyle.blue_button} ${isNoEdit ? '' : infoStyle.save_change}`}
                         type='submit'>
                         {mode}
-                    </button>
-                    <button className={`${infoStyle.button} ${infoStyle.button_red}`}
-                            style={isNoEdit ? {} : {display: "none"}} onClick={() => dispatch(logout())}>Выйти
                     </button>
                 </form>
             }
