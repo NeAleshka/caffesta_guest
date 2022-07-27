@@ -1,6 +1,5 @@
 const {injectManifest} =require ('workbox-build')
 
-
 let workboxConfig={
     globDirectory:'../build',
     globPatterns:[
@@ -8,10 +7,9 @@ let workboxConfig={
         'index.html',
         'static/css/*.*.css',
         'static/js/*.*.js',
-        'asset-manifest.json',
+        'manifest.json',
         'static/media/*.*.svg',
         'static/media/*.*.woff',
-        'offline.html'
     ],
     swSrc:'sw-workbox.js',
     swDest:'../public/service-worker.js',

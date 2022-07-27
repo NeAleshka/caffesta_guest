@@ -21,24 +21,27 @@ function App() {
     const dispatch = useAppDispatch()
     let [cookies, setCookies] = useCookies()
     const organizationInfo = useSelector<RootState, IOrganizationInfo>(state => state.infoUser.info.organizationInfo as IOrganizationInfo)
-    const [networkStatus,setNetworkStatus]=useState<boolean>(true)
+    // const [networkStatus,setNetworkStatus]=useState<boolean>(true)
     const navigate=useNavigate()
-    if(!window.navigator.onLine){
-        navigate('/user/qr_code')
-    }
 
-    window.addEventListener('online',()=>{
+   /* window.addEventListener('online',()=>{
         setNetworkStatus(true)
     })
     window.addEventListener('offline',()=>{
         setNetworkStatus(false)
     })
 
+
+
     useEffect(()=>{
         if(networkStatus){
             dispatch(authMe(cookies.refreshToken))
         }
-    },[networkStatus])
+    },[networkStatus])*/
+
+    useEffect(()=>{
+        dispatch(authMe(cookies.refreshToken))
+    },[])
 
     return (
         <CookiesProvider>

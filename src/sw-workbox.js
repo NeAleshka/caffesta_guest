@@ -3,8 +3,14 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.1.1/workbox
 workbox.setConfig({
     debug: true,
 })
-const cacheName=workbox.core.cacheNames.precache
-const setCacheName=workbox.core.setCacheNameDetails
+
+
+const cacheName = workbox.core.cacheNames.precache
+const setCacheName = workbox.core.setCacheNameDetails
+
+
+
+
 setCacheName({
     prefix: 'guest',
     suffix: 'v1',

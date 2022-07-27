@@ -7,6 +7,8 @@ workbox.setConfig({
 
 const cacheName = workbox.core.cacheNames.precache
 const setCacheName = workbox.core.setCacheNameDetails
+
+
 setCacheName({
     prefix: 'guest',
     suffix: 'v1',
@@ -15,28 +17,21 @@ setCacheName({
     googleAnalytics: 'ga',
 });
 workbox.core.clientsClaim();
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(event.request).then(function (response) {
-            return response || fetch(event.request);
-        }),
-    );
-});
 
 workbox.precaching.precacheAndRoute([{
     "revision": "99dbb1ac10f49b8b1fcc4879f60b7313",
     "url": "favicon.ico"
 }, {
-    "revision": "31aed546ded10cc4f78ac847b857f18a",
+    "revision": "304a1136f608847a68c957e5cda455de",
     "url": "index.html"
 }, {
     "revision": "6fd885036a48c65dc1c9476777ddfc83",
     "url": "static/css/main.accd9ff3.css"
 }, {
-    "revision": "c02707f96adb01d9981185c8d500653c",
-    "url": "static/js/main.42e89394.js"
+    "revision": "3445cd289236155e359f4ec9d70c70d4",
+    "url": "static/js/bundle.js"
 }, {
-    "revision": "bc9520ea17b2e9685ba5961e7d87ed17",
+    "revision": "76336b16a5abf1901468be6014389175",
     "url": "manifest.json"
 }, {
     "revision": "b578821088f639079d5dd8764b0ca38e",
@@ -68,11 +63,18 @@ workbox.precaching.precacheAndRoute([{
 }, {
     "revision": "45656b73e1a07f979bfb56559b359b07",
     "url": "static/media/Geometria-Medium.ce81051a1ed94e89b4e1.woff"
-}, {
-    "revision": "3c6a7d3ae76a5aec78aac69db1af15cf",
-    "url": "static/media/Geometria.b7f74b260291c82461d1.woff"
-}, {
-    "revision": "cd42d299828c8762ff81eb5f1fe73dd2",
-    "url": "offline.html"
+}, {"revision": "3c6a7d3ae76a5aec78aac69db1af15cf", "url": "static/media/Geometria.b7f74b260291c82461d1.woff"},
+    {
+        "url": '/caffesta_guest/#/user/qr_code',
+        "revision": null,
+    },{
+        "url": '/caffesta_guest/#/user/info',
+        "revision": null,
+    },{
+        "url": '/caffesta_guest/#/sing_in',
+        "revision": null,
+    },{
+        "url": '/caffesta_guest/#/user/sing_up',
+        "revision": null,
     },
 ])
