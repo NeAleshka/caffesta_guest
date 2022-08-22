@@ -8,14 +8,15 @@ const Main=()=>{
     const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
     const navigate=useNavigate()
     const dispatch=useAppDispatch()
+    const requestMessage=useSelector<RootState,string>(state => state.infoUser.requestMessage)
 
     if(isLogin){
         navigate('/user/qr_code')
     }
 
-    const onClick = () => {
+    const onClick = (goTo:string) => {
         dispatch(setIsLoading(true))
-        navigate('/sing_up')
+        navigate(goTo)
     }
 
     return(
@@ -27,13 +28,13 @@ const Main=()=>{
                             <form className={styles.form__body} >
                                 <button className={styles.type1}>
                                     <div className={styles.button_text}
-                                         onClick={()=>onClick()}
+                                         onClick={()=>onClick("/sing_up")}
                                     >Зарегистрироваться</div>
                                 </button>
                             </form>
                             <form className={styles.form__body} >
                                 <button className={`${styles.type1} ${styles.type2}`}
-                                        onClick={()=>navigate('/sing_in')}>
+                                        onClick={()=>onClick('/sing_in')}>
                                     <div className={styles.button_text} >Уже клиент заведения?</div>
                                 </button>
                             </form>

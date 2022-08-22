@@ -11,8 +11,8 @@ let workboxConfig={
         'static/media/*.*.svg',
         'static/media/*.*.woff',
     ],
-    swSrc:'sw-workbox.js',
-    swDest:'../public/service-worker.js',
+    swSrc:'sw.js',
+    swDest:'../public/sw.js',
 }
 
 injectManifest(workboxConfig).then(({count,size})=>{

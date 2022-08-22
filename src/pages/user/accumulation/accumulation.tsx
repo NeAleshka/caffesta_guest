@@ -7,7 +7,7 @@ import {RootState} from "../../../store";
 import {IBonuses} from "../../../interfaces";
 
 const Accumulation = () => {
-    const bonuses=useSelector<RootState,IBonuses>(state => state.infoUser.info.bonuses as IBonuses)
+    const bonuses=useSelector<RootState,IBonuses>(state => state.infoUser.info?.bonuses as IBonuses)
     const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
 
     const validDate = () => {
@@ -43,16 +43,16 @@ const Accumulation = () => {
             <div className={accStyle.description}>Ваши накопления на <br/> {date} г.,{time}</div>
             <div className={styles.form_body}>
                 <div className={inputStyle.form__item} >
-                    <input  className={`${styles.input_data} ${accStyle.input}`} value={`Бонусы: ${bonuses.bonus}`} readOnly/>
+                    <input  className={`${styles.input_data} ${accStyle.input}`} value={`Бонусы: ${bonuses?.bonus??0}`} readOnly/>
                 </div>
                 <div className={inputStyle.form__item} aria-readonly={true}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Баллы: ${bonuses.points}`} readOnly/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Баллы: ${bonuses?.points??0}`} readOnly/>
                 </div>
                 <div className={inputStyle.form__item} aria-readonly={true}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Счёт: ${bonuses.check} р.`} readOnly/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Счёт: ${bonuses?.check??0} р.`} readOnly/>
                 </div>
                 <div className={inputStyle.form__item} aria-readonly={true}>
-                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Сумма покупок: ${bonuses.sum} р.`} readOnly/>
+                    <input className={`${styles.input_data} ${accStyle.input}`} value={`Сумма покупок: ${bonuses?.sum??0} р.`} readOnly/>
                 </div>
             </div>
         </div>

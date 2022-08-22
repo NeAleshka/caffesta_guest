@@ -21,16 +21,15 @@ const User = () => {
         }
     }, [isInitialized, isLogin])
 
-    // useEffect(()=>{
-    //     if (!isOnline){
-    //         isLogin=true
-    //         isInitialized=true
-    //     }
-    // },[isOnline])
+    useEffect(()=>{
+        if (!isOnline){
+            isLogin=true
+            isInitialized=true
+        }
+    },[isOnline])
 
 
     return ( isLogin && isInitialized ?
-    // return (
         <div>
             {isLoading ? <PreLoader loading={isLoading}/> :
                 <Routes>
@@ -39,7 +38,6 @@ const User = () => {
                     <Route path={'qr_code'} element={<QRCode/>}/>
                 </Routes>}
             <Footer/>
-            {/*</div> : <div>Привет</div>)*/}
         </div>:<div>Offline</div>)
 }
 

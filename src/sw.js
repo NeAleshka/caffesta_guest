@@ -19,5 +19,4 @@ setCacheName({
     googleAnalytics: 'ga',
 });
 workbox.core.clientsClaim();
-
 workbox.precaching.precacheAndRoute(self.__WB_MANIFEST)

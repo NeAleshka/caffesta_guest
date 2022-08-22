@@ -61,7 +61,6 @@ const SingIn = () => {
         }
     },[isVerification])
 
-
     return(
         <div className={`${mainStyles.wrapper} ${mainStyles.flexCol}`}>
             {isLoading? <PreLoader loading={isLoading}/>:
@@ -100,7 +99,7 @@ const SingIn = () => {
                                         } type="submit" disabled={checkInputs()}
                                     >Вход
                                     </button>
-                                    {!isVerification && <div>{requestMessage}</div>}
+                                    {<div>{requestMessage}</div>}
                                 </form>
                             </div>
                         </section>

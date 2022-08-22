@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/caffesta_guest/static/css/main.accd9ff3.css",
+    "main.js": "/caffesta_guest/static/js/main.3b82c592.js",
+    "static/media/Geometria.woff": "/caffesta_guest/static/media/Geometria.b7f74b260291c82461d1.woff",
+    "static/media/Geometria-Medium.woff": "/caffesta_guest/static/media/Geometria-Medium.ce81051a1ed94e89b4e1.woff",
+    "static/media/Geometria-Bold.woff": "/caffesta_guest/static/media/Geometria-Bold.3a9ed34be5c5b3d8fc3c.woff",
+    "static/media/favicon.ico": "/caffesta_guest/static/media/favicon.1d25e95960d32b1bd6de.ico",
+    "static/media/logo.svg": "/caffesta_guest/static/media/logo.80e3b7f2aa8f0e234e644ab3f5e86b66.svg",
+    "static/media/qr.svg": "/caffesta_guest/static/media/qr.d90ce238c55f0df5833d9ed78d541502.svg",
+    "static/media/Phone.svg": "/caffesta_guest/static/media/Phone.7f57311fdf0e51e1c3a76d81166f79c4.svg",
+    "static/media/Calendar.svg": "/caffesta_guest/static/media/Calendar.10a98c21b62903a00d416f25939ddeae.svg",
+    "index.html": "/caffesta_guest/index.html",
+    "static/media/gift.svg": "/caffesta_guest/static/media/gift.6524bbfefbfc6ecc77b94cf52dd23d7d.svg",
+    "static/media/user.svg": "/caffesta_guest/static/media/user.6056b4037e72f4521dc8e1fefa10472d.svg",
+    "static/media/email.svg": "/caffesta_guest/static/media/email.cfd7fc9e9b6a564041920dd6a8418ed8.svg",
+    "static/media/profile.svg": "/caffesta_guest/static/media/profile.d8beab90a1c3af72e650dfbb71a80de6.svg",
+    "main.accd9ff3.css.map": "/caffesta_guest/static/css/main.accd9ff3.css.map",
+    "main.3b82c592.js.map": "/caffesta_guest/static/js/main.3b82c592.js.map"
+  },
+  "entrypoints": [
+    "/static/css/main.accd9ff3.css",
+    "/static/js/main.3b82c592.js"
+  ]
+}

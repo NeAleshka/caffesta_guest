@@ -22,10 +22,10 @@ const InfoUser = () => {
 
     const formik = useFormik({
         initialValues: {
-            phone: dataUser.phone ?? 'Нет данных',
-            email: dataUser.email ?? 'Нет данных',
-            name: dataUser.name ?? 'Нет данных',
-            lastName: dataUser.lastName ?? 'Нет данных'
+            phone: infoUser?.phone ?? 'Нет данных',
+            email: infoUser?.email ?? 'Нет данных',
+            name: infoUser?.name ?? 'Нет данных',
+            lastName: infoUser?.lastName ?? 'Нет данных'
         },
         validate: (values) => {
             const errors: FormikErrorType = {}
@@ -63,11 +63,11 @@ const InfoUser = () => {
                 <BounceLoader color={'blue'}/>
                 </div> :
                 <form className={inputStyle.form_body} onSubmit={formik.handleSubmit}>
-                    <h3 style={{fontWeight: '400', marginTop: '30px'}}>{dataUser.name ?? 'User Name'}</h3>
+                    <h3 style={{fontWeight: '400', marginTop: '30px'}}>{dataUser?.name ?? 'User Name'}</h3>
                     <div className={`${inputStyle.form__item} ${infoStyle.form_body}`}>
                         <input className={`${inputStyle.input_data} ${disabledStyle}`} disabled={isNoEdit}
                                type={'tel'}
-                               placeholder={infoUser.phone}
+                               placeholder={infoUser?.phone}
                                {...formik.getFieldProps('phone')}
                         />
                     </div>
@@ -76,7 +76,7 @@ const InfoUser = () => {
                     <div className={inputStyle.form__item}>
                         <input className={`${inputStyle.input_data} ${disabledStyle}`} disabled={isNoEdit}
                                type={'text'}
-                               placeholder={infoUser.email}
+                               placeholder={infoUser?.email}
                                {...formik.getFieldProps('email')}
                         />
                     </div>
@@ -84,7 +84,7 @@ const InfoUser = () => {
                         <div className={styles.formik_errors}>{formik.errors.email}</div>}
                     <div className={inputStyle.form__item}>
                         <input className={`${inputStyle.input_data} ${disabledStyle}`} disabled={isNoEdit}
-                               placeholder={infoUser.name}
+                               placeholder={infoUser?.name}
                                {...formik.getFieldProps('name')}
                         />
                     </div>
@@ -93,7 +93,7 @@ const InfoUser = () => {
                     <div className={inputStyle.form__item}>
                         <input className={`${inputStyle.input_data} ${disabledStyle}`}
                                disabled={isNoEdit}
-                               placeholder={infoUser.lastName}
+                               placeholder={infoUser?.lastName}
                                {...formik.getFieldProps('lastName')}
                         />
                     </div>
