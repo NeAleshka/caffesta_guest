@@ -1,9 +1,8 @@
 import {createAction, createAsyncThunk, createSlice} from "@reduxjs/toolkit"
 import userApi from "../api";
 import {
-    IAuthMe,
+    IAuthMe, IErrorRequest,
     ILoginResponse,
-    IRejectResponse,
     IUserDTO,
     IUserInfo,
     IVerificationReject,
@@ -12,7 +11,7 @@ import {
 
 
 export const registrationUser = createAsyncThunk<ILoginResponse, IUserInfo, {
-    rejectValue: IRejectResponse
+    rejectValue: { error:IErrorRequest }
 }>(
     'infoUser/registrationUser',
     async (data: IUserInfo, {rejectWithValue, dispatch}) => {
@@ -58,12 +57,12 @@ export const verificationUser = createAsyncThunk<IVerificationResponse, string, 
     }
 )
 
-export const sendVerificationCode = createAsyncThunk<{ isVerification: boolean }, { email: string, login: string }, { rejectValue: { isVerification: boolean, message: string } }>(
+export const sendVerificationCode = createAsyncThunk<{ success: boolean, error?: IErrorRequest }, { email: string }, { rejectValue: IErrorRequest }>(
     'infoUser/sendVerificationCode',
-    async ({email, login}, {rejectWithValue, dispatch}) => {
+    async ({email}, {rejectWithValue, dispatch}) => {
         dispatch(setIsLoading(true))
         try {
-            return await userApi.sendVerificationCode(email, login)
+            return await userApi.sendVerificationCode(email)
         } catch (e) {
             return rejectWithValue(e.response.data)
         } finally {
@@ -97,13 +96,13 @@ export const logout = createAsyncThunk(
         }
     })
 
-export const changeUserInfo = createAsyncThunk<IUserDTO, IUserDTO, { rejectValue: { message: string } }>(
+export const changeUserInfo = createAsyncThunk<{ data?:IUserDTO,success:boolean,error?:IErrorRequest } , IUserDTO, { rejectValue: { error: IErrorRequest } }>(
     'infoUser/changeInfo',
     async (data, {rejectWithValue}) => {
         try {
             return userApi.changeInfo(data)
         } catch (e) {
-            return rejectWithValue(e)
+            return rejectWithValue(e.response.data)
         }
     }
 )
@@ -117,7 +116,7 @@ export const setIsEdit = createAction('infoUser/setIsEdit', (isEdit: boolean = f
 })
 
 export const setIsLoading = createAction('infoUser/setIsLoading',
-    (isLoading:boolean) => {
+    (isLoading: boolean) => {
         return {
             payload: {
                 isLoading
@@ -136,7 +135,7 @@ const initial: IUserDTO = {
         check: 0,
         sum: 0
     },
-    cardNumber: "0000",
+    cardNumber: "0",
     id: '',
     organizationInfo: {
         name: '',
@@ -144,18 +143,31 @@ const initial: IUserDTO = {
     }
 }
 
+interface IInitial {
+    isEdit?: boolean,
+    isLogin?: boolean,
+    isVerification?: boolean,
+    isSuccessRequest?: boolean,
+    info?: IUserDTO,
+    requestMessage?: string,
+    isLoading?: boolean,
+    isInitialized?: boolean,
+}
+
+const initialState: IInitial = {
+    isEdit: true,
+    isLogin: false,
+    isVerification: false,
+    isSuccessRequest: false,
+    info: initial,
+    requestMessage: '',
+    isLoading: false,
+    isInitialized: false,
+}
+
 const infoUserSlice = createSlice({
     name: "infoUser",
-    initialState: {
-        isEdit: true,
-        isLogin: false,
-        isVerification: false,
-        isSuccessRequest: false,
-        info: initial,
-        requestMessage: '',
-        isLoading: false,
-        isInitialized: false,
-    },
+    initialState: initialState,
     reducers: {
         changeInfo(state, action) {
             state.isEdit = !state.isEdit
@@ -169,26 +181,31 @@ const infoUserSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(registrationUser.fulfilled, (state, action) => {
-                state.requestMessage = ''
-                state.isSuccessRequest = action.payload.isLogin
+                if (action.payload.success) {
+                    state.requestMessage = ''
+                    state.isSuccessRequest = true
+                } else {
+                    state.isSuccessRequest = false
+                    state.requestMessage = action.payload.error?.message || "Something Error"
+                }
             })
             .addCase(registrationUser.rejected, (state, action) => {
-                if (action.payload) {
-                    state.requestMessage = action.payload.data.message || "Something Error"
-                    state.isSuccessRequest = action.payload.data.isLogin
-                }
+                state.requestMessage =  action.payload?.error.message
+                state.isSuccessRequest =false
 
             })
             .addCase(authMe.pending, (state) => {
                 state.requestMessage = ''
             })
             .addCase(authMe.fulfilled, (state, action) => {
-                if (action.payload) {
-                    state.isLogin = action.payload.isLogin
-                    state.info = action.payload.userData ?? initial
+                if (action.payload.success) {
+                    state.isLogin = true
+                    state.info = action.payload.userData || initial
+                    state.requestMessage = ''
+                    state.isInitialized = true
+                } else {
+                    state.requestMessage = action.payload.error?.message
                 }
-                state.requestMessage = ''
-                state.isInitialized = true
             })
             .addCase(authMe.rejected, (state,) => {
                 state.isLogin = false
@@ -197,45 +214,51 @@ const infoUserSlice = createSlice({
             .addCase(verificationUser.fulfilled, (state, action) => {
                 state.requestMessage = ''
                 state.isSuccessRequest = false
-                if (action.payload) {
-                    state.isLogin = action.payload.isVerification
+                if (action.payload.success && action.payload.userData) {
+                    state.isLogin = true
                     state.info = action.payload.userData
-                    if (action.payload.userData.organizationInfo) {
-                        localStorage.setItem('logo', action.payload.userData.organizationInfo.logo)
-                        localStorage.setItem('organizationName', action.payload.userData.organizationInfo.name)
-                    }
+                    localStorage.setItem('logo', action.payload.userData.organizationInfo?.logo ?? "")
+                    localStorage.setItem('organizationName', action.payload.userData.organizationInfo?.name ?? "")
+                } else {
+                    state.isLogin = false
+                    state.requestMessage = action.payload.error?.message || "Something Error"
                 }
             })
             .addCase(verificationUser.rejected, (state, action) => {
                 state.isSuccessRequest = false
-                if (action) {
-                    state.requestMessage = action.payload?.message as string || "Something Error"
-                }
+                state.requestMessage = action.payload?.message || 'Error connection'
             })
 
             .addCase(sendVerificationCode.fulfilled, (state, action) => {
-                state.requestMessage = ''
-                state.isVerification = action.payload?.isVerification
+                if (action.payload.success) {
+                    state.requestMessage = ''
+                    state.isVerification = true
+                } else {
+                    state.isVerification = false
+                    state.requestMessage = action.payload.error?.message || "Something Error"
+                }
             })
             .addCase(sendVerificationCode.rejected, (state, action) => {
-                if (action.payload) {
-                    state.isVerification = action.payload.isVerification
-                    state.requestMessage = action.payload.message || "Something Error"
-                }
+                state.isVerification = false
+                state.requestMessage = action.payload?.message || "Something Error"
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.requestMessage = ''
-                state.isLogin = action.payload.isLogin
-                state.info = action.payload.userData?.user
-                if (action.payload.userData?.user?.organizationInfo) {
+                if (action.payload.success && action.payload.userData) {
+                    state.isLogin = true
+                    state.info = action.payload.userData?.user
                     localStorage.setItem('accessToken', action.payload.userData.accessToken)
-                    localStorage.setItem('logo', action.payload.userData.user.organizationInfo.logo)
-                    localStorage.setItem('organizationName', action.payload.userData.user.organizationInfo.name)
+                    localStorage.setItem('logo', action.payload.userData.user.organizationInfo?.logo ?? "")
+                    localStorage.setItem('organizationName', action.payload.userData.user.organizationInfo?.name ?? "")
+
+                } else {
+                    state.isLogin = false
+                    state.requestMessage = action.payload.error?.message || 'Error'
                 }
             })
             .addCase(login.rejected, (state, action) => {
                 state.isLogin = false
-                state.requestMessage = action.payload?.message?? "Something Error"
+                state.requestMessage = action.payload?.message || "Error connection"
             })
             .addCase(logout.pending, (state) => {
                 state.isLoading = true
@@ -249,13 +272,17 @@ const infoUserSlice = createSlice({
                 state.isLoading = false
             })
             .addCase(changeUserInfo.fulfilled, (state, action) => {
-                state.isEdit = true
-                state.info = action.payload
-
+                state.isEdit=true
+                if(action.payload.success){
+                    state.info = action.payload.data
+                }
+                else {
+                    state.requestMessage=action.payload.error?.message || 'Something error'
+                }
             })
-            .addCase(changeUserInfo.rejected, (state) => {
+            .addCase(changeUserInfo.rejected, (state,action) => {
                 state.isEdit = true
-                state.requestMessage = "Something Error"
+                state.requestMessage = action.payload?.error?.message || 'Something error'
             })
             .addCase(setIsEdit, (state, action) => {
                 state.isEdit = action.payload.isEdit
@@ -263,5 +290,4 @@ const infoUserSlice = createSlice({
     }
 })
 
-export const {changeInfo} = infoUserSlice.actions
 export default infoUserSlice.reducer

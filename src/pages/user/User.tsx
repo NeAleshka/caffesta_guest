@@ -9,10 +9,10 @@ import QRCode from "./qrCode/QRCode";
 import PreLoader from "../../components/PreLoader";
 
 const User = () => {
-    let isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin)
-    let isInitialized = useSelector<RootState, boolean>(state => state.infoUser.isInitialized)
+    let isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin as boolean)
+    let isInitialized = useSelector<RootState, boolean>(state => state.infoUser.isInitialized as boolean)
     const navigate = useNavigate()
-    const isLoading = useSelector<RootState, boolean>(state => state.infoUser.isLoading)
+    const isLoading = useSelector<RootState, boolean>(state => state.infoUser.isLoading as boolean)
     const isOnline=navigator.onLine
 
     useEffect(() => {

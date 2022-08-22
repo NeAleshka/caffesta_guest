@@ -5,10 +5,9 @@ import {RootState, useAppDispatch} from "../../store";
 import {setIsLoading} from "../../store/infoUserSlice";
 
 const Main=()=>{
-    const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
+    const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin as boolean)
     const navigate=useNavigate()
     const dispatch=useAppDispatch()
-    const requestMessage=useSelector<RootState,string>(state => state.infoUser.requestMessage)
 
     if(isLogin){
         navigate('/user/qr_code')

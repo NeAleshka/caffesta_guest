@@ -8,7 +8,6 @@ import {IBonuses} from "../../../interfaces";
 
 const Accumulation = () => {
     const bonuses=useSelector<RootState,IBonuses>(state => state.infoUser.info?.bonuses as IBonuses)
-    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
 
     const validDate = () => {
         const date=new Date()

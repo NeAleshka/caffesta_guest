@@ -22,8 +22,8 @@ const SendMessage = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const stateLocation = useLocation().state as locationStateType
-    const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isVerification)
-    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
+    const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isVerification as boolean)
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading as boolean)
 
     const formik = useFormik({
         initialValues: {
@@ -39,7 +39,7 @@ const SendMessage = () => {
             return errors
         },
         onSubmit: () => {
-            dispatch(sendVerificationCode({email:formik.values.email,login:stateLocation.login}))
+            dispatch(sendVerificationCode({email:formik.values.email}))
         }
     })
     const checkInputs = () => {

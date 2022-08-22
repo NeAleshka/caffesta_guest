@@ -1,5 +1,5 @@
 import axios from "axios";
-import {IUserInfo, ILoginResponse, IUserDTO} from "./interfaces";
+import {IUserInfo, ILoginResponse, IUserDTO, IErrorRequest} from "./interfaces";
 
 
 const instants=axios.create({
@@ -9,7 +9,7 @@ const instants=axios.create({
 
 const userApi={
     reg(data:IUserInfo){
-      return instants.post<IUserInfo,{ data: ILoginResponse}>('registration',{...data}).then(res=>res.data)
+      return instants.post<IUserInfo, { data: ILoginResponse }>('registration',{...data}).then(res=>res.data)
     },
     me(refreshToken: string){
         return instants.get('authMe', {
@@ -19,10 +19,10 @@ const userApi={
         }).then(res=>res.data)
     },
     userVerification( verificationCode: string){
-        return instants.post<{data:{verificationCode:string,login:string} },{data: { isVerification: boolean, message: string,userData:IUserDTO }}>('verification',{verificationCode}).then(res=>res.data)
+        return instants.post<{data:{verificationCode:string,login:string} },{data: { success: boolean, error: IErrorRequest,userData:IUserDTO }}>('verification',{verificationCode}).then(res=>res.data)
     },
-    sendVerificationCode(email:string,login:string){
-        return instants.post<{email:string,login:string}, { data: { isVerification: boolean }}>('confirm_email',{email,login}).then(res=>res.data)
+    sendVerificationCode(email:string){
+        return instants.post<{email:string}, { data: { success: boolean }}>('confirm_email',{email}).then(res=>res.data)
     },
     login(login:string,password:string){
         return instants.post<{login:string,password:string},{ data: ILoginResponse}>('login',{login,password}).then(res=>res.data)
@@ -31,7 +31,7 @@ const userApi={
         return instants.post('logout')
     },
     changeInfo(data:IUserDTO) {
-        return instants.put<IUserDTO, { data: IUserDTO }>('change_info',{...data}).then(res=>res.data)
+        return instants.put<IUserDTO, { data: IUserDTO,success:boolean }>('change_info',{...data})
     }
 }
 

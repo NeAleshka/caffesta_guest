@@ -20,9 +20,9 @@ type FormikErrorType = {
 const SingIn = () => {
     const navigate = useNavigate()
     const dispatch=useAppDispatch()
-    const requestMessage=useSelector<RootState,string>(state => state.infoUser.requestMessage)
-    const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
-    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
+    const requestMessage=useSelector<RootState,string>(state => state.infoUser.requestMessage as string)
+    const isVerification=useSelector<RootState,boolean>(state => state.infoUser.isLogin as boolean)
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading as boolean)
     const formik = useFormik({
         initialValues: {
             login: '',

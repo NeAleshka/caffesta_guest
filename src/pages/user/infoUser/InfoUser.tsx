@@ -5,18 +5,18 @@ import {useEffect, useState} from "react";
 import {useSelector} from 'react-redux'
 import {changeUserInfo, logout, setIsEdit} from "../../../store/infoUserSlice";
 import {RootState, useAppDispatch} from "../../../store";
-import {IUserDTO} from "../../../interfaces";
+import {IUserDTO, IUserInfo} from "../../../interfaces";
 import {useFormik} from "formik";
 import {FormikErrorType} from "../../sing_up/SingUp";
 import styles from "../../sing_up/singUp.module.css";
 import {BounceLoader} from 'react-spinners'
 
 const InfoUser = () => {
-    let isNoEdit = useSelector<RootState, boolean>(state => state.infoUser.isEdit)
+    let isNoEdit = useSelector<RootState, boolean>(state => state.infoUser.isEdit as boolean)
     const disabledStyle = isNoEdit ? `${infoStyle.disabled}` : ''
-    const dataUser = useSelector<RootState, IUserDTO>(state => state.infoUser.info)
+    const dataUser = useSelector<RootState, IUserDTO>(state => state.infoUser.info as IUserInfo)
     const dispatch = useAppDispatch()
-    const isLoading = useSelector<RootState, boolean>(state => state.infoUser.isLoading)
+    const isLoading = useSelector<RootState, boolean>(state => state.infoUser.isLoading as boolean)
     const [infoUser, setInfoUser] = useState(dataUser)
     let mode = isNoEdit ? 'Редактировать профиль' : 'Сохранить'
 

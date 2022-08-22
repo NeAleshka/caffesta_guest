@@ -1,11 +1,13 @@
 export interface IAuthMe {
-    userData: IUserDTO,
-    isLogin: boolean
+    userData?: IUserDTO,
+    success: boolean
+    error?:IErrorRequest
 }
 
 export interface ILoginResponse {
-    userData: IUserData
-    isLogin: boolean
+    userData?: IUserData
+    success: boolean
+    error?:IErrorRequest
 }
 
 interface IUserData {
@@ -43,9 +45,9 @@ export interface IRejectResponse {
 }
 
 export interface IVerificationResponse{
-    userData: IUserDTO
-    isVerification:boolean
-    message:string
+    userData?: IUserDTO
+    success:boolean
+    error?:IErrorRequest
 }
 
 export interface IVerificationReject{
@@ -63,4 +65,10 @@ export interface IBonuses{
 export interface IOrganizationInfo {
     name:string
     logo:string
+}
+
+export interface IErrorRequest{
+    code:number
+    message?:string
+    label:string
 }

@@ -23,9 +23,9 @@ const SendMessage = () => {
     const navigate = useNavigate()
     const locationState = location.state as CustomizedState
     const {sendingEmail: userEmail} = locationState;
-    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
-    const isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin)
-    const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage)
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading as boolean)
+    const isLogin = useSelector<RootState, boolean>(state => state.infoUser.isLogin as boolean)
+    const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage as string)
 
     const formik = useFormik({
         initialValues: {

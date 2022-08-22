@@ -4,7 +4,7 @@ import {useSelector} from "react-redux";
 import {RootState} from "../../store";
 
 const LayOut=()=>{
-    const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin)
+    const isLogin=useSelector<RootState,boolean>(state => state.infoUser.isLogin as boolean)
 
 
     return(

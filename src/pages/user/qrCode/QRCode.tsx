@@ -11,7 +11,7 @@ import {useLayoutEffect, useState} from "react";
 import {setIsLoading} from "../../../store/infoUserSlice";
 
 
-const QRCodeWrapper = () => {
+const QRCodePage = () => {
     const userName = useSelector<RootState, string>(state => state.infoUser.info?.name as string)
     if (!userName) {
         return <div>Error</div>
@@ -84,4 +84,4 @@ const QRCode = () => {
     )
 }
 
-export default QRCodeWrapper
+export default QRCodePage

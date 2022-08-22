@@ -27,11 +27,11 @@ export type FormikErrorType = {
 
 const SingUp = () => {
     const [startDate, setStartDate] = useState(new Date())
-    const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage)
-    let isSuccessRequest = useSelector<RootState, boolean>(state => state.infoUser.isSuccessRequest)
+    const requestMessage = useSelector<RootState, string>(state => state.infoUser.requestMessage as string)
+    let isSuccessRequest = useSelector<RootState, boolean>(state => state.infoUser.isSuccessRequest as boolean)
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading)
+    const isLoading=useSelector<RootState,boolean>(state => state.infoUser.isLoading as boolean)
     const formik = useFormik({
         initialValues: {
             phone: '',
@@ -192,13 +192,13 @@ const SingUp = () => {
                                         {formik.touched.birthday && formik.errors.birthday &&
                                             <div className={styles.formik_errors}>{formik.errors.birthday}</div>}
                                     </div>
+                                    {!isSuccessRequest && <div>{requestMessage}</div>}
                                     <button
                                         className={`${styles.submitButton} ${(!formik.isValid || !validTouched)? styles.submitButtonError : ''}`
                                         } type="submit"
                                         disabled={!formik.isValid || !validTouched}
                                     >Продолжить
                                     </button>
-                                    {!isSuccessRequest && <div>{requestMessage}</div>}
                                 </form>
                             </div>
                         </div>
